@@ -73,12 +73,13 @@ model.fit(trainingX, trainingY, epochs=500, batch_size=10, verbose=1, validation
 # score = model.evaluate(testingX, testingY, verbose=0)
 score = 0
 for i in range(100):
-    estimate = model.predict_classes(np.array([testingX[i,:]]))
-
-    if testingY[i,estimate] == 1:
+    # estimate = model.predict_classes(np.array([testingX[i,:]]))
+    predict_x = model.predict(np.array([testingX[i,:]]))
+    classes_x = np.argmax(predict_x, axis = 1)
+    if testingY[i,classes_x] == 1:
         score = score  + 1
 
-    if estimate == 0:
+    if classes_x == 0:
         plt.plot(testingX[i, 0], testingX[i, 1], 'bo')
     else: 
         plt.plot(testingX[i, 0], testingX[i, 1], 'rx')

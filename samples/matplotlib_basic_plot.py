@@ -12,7 +12,9 @@ x = np.arange(0,2*np.pi,0.1)
 
 # Create a sin function sample
 y0 = np.sin(x)
-plt.plot(x, y0, color = 'r', linewidth = 3)
+#plt.plot(x, y0, color = 'r', linewidth = 3)
+#plt.plot(x, y0, 'gP-')
+plt.plot(x, y0, 'g-.')
 
 # Create a dash cos function sample
 y1 = np.cos(x)
