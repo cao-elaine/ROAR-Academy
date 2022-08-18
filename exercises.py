@@ -4,6 +4,9 @@ import matplotlib.image as image
 from matplotlib import pyplot
 import PyPDF2
 import numpy as np
+from datetime import datetime
+import matplotlib.pyplot as plt
+
 
 #11.1
 # file_name = 'motto.txt'
@@ -132,3 +135,93 @@ import numpy as np
 # m = np.array([[6, -9, 1],[4, 24, 8],[10,3,5]])
 # swap_columns(m, 1, 2)
 # print(m)
+
+
+
+
+
+
+#12.4
+# def set_array(L, rows, cols):
+#     if rows * cols != len(L):
+#         raise ValueError('invalid input')
+#     numpy_array = np.zeros((rows, cols))
+#     index = 0
+#     for i in range(rows):
+#         for j in range(cols): 
+#             numpy_array[i][j] = L[index]
+#             index += 1
+#     return numpy_array
+
+# L = [1,2,3,4,5,6,7,8]
+# print(set_array(L, 8, 1))
+
+
+
+
+
+
+# #12.5
+# arr = np.array([[0, 1, 2, 3, 4, 5], [10, 11, 12, 13, 14, 15], [20, 21, 22, 23, 24, 25], [30, 31, 32, 33, 34, 35], [40, 41, 42, 43, 44, 45], [50, 51, 52, 53, 54, 55]])
+# blue = np.array(arr[:6, 1])
+# print(blue)
+# pink = np.array(arr[1, 2:4])
+# print(pink)
+# green = np.array(arr[2:4, 4:6])
+# print(green)
+# orange = np.array(arr[2:5:2, 0:5:2])
+# print(orange)
+
+
+
+
+
+
+#13.1
+# Initialization, define some constant
+path = os.path.dirname(os.path.abspath(__file__))
+filename = path + '/samples/airplane.bmp'
+background = plt.imread(filename)
+
+second_hand_length = 200
+second_hand_width = 2
+minute_hand_length = 150
+minute_hand_width = 6
+hour_hand_length = 100
+hour_hand_width = 10
+gmt_hour_hand_length = 100
+gmt_hour_hand_width = 10
+center = np.array([256, 256])
+
+def clock_hand_vector(angle, length):
+    return np.array([length * np.sin(angle), -length * np.cos(angle)])
+
+# draw an image background
+fig, ax = plt.subplots()
+
+while True:
+    plt.imshow(background)
+    plt.axis('off')
+    # First retrieve the time
+    now_time = datetime.now()
+    hour = now_time.hour
+    gmt_hour = int(now_time.strftime('%H')) + 8
+    if hour>12: hour = hour - 12
+    if gmt_hour > 24: gmt_hour = gmt_hour - 24
+    minute = now_time.minute
+    second = now_time.second
+
+    # Calculate end points of hour, minute, second
+
+    hour_vector = clock_hand_vector(hour/12*2*np.pi+second/(3600*60)*2*np.pi, hour_hand_length)
+    minute_vector = clock_hand_vector(minute/60*2*np.pi+second/3600*2*np.pi, minute_hand_length)
+    second_vector = clock_hand_vector(second/60*2*np.pi, second_hand_length)
+    gmt_hour_vector = clock_hand_vector(gmt_hour/24*2*np.pi+second/(3600*60*2)*2*np.pi, gmt_hour_hand_length)
+
+    plt.arrow(center[0], center[1], hour_vector[0], hour_vector[1], head_length = 3, linewidth = hour_hand_width, color = 'black')
+    plt.arrow(center[0], center[1], minute_vector[0], minute_vector[1], linewidth = minute_hand_width, color = 'black')
+    plt.arrow(center[0], center[1], second_vector[0], second_vector[1], linewidth = second_hand_width, color = 'red')
+    plt.arrow(center[0], center[1], gmt_hour_vector[0], gmt_hour_vector[1], linewidth = gmt_hour_hand_width, color = 'yellow')
+
+    plt.pause(0.1)
+    plt.clf()
